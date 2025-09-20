@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'memoramaGame.dart';
+import 'random_colors.dart';
 
 class Seleccion_menu extends StatefulWidget {
   const Seleccion_menu({super.key});
@@ -43,6 +44,31 @@ class _Seleccion_menuState extends State<Seleccion_menu> {
                 int columns = int.tryParse(widthController.text) ?? 4;
                 int rows = int.tryParse(heightController.text) ?? 5;
 
+                int totalCells = columns * rows;
+                final int maxPairs = palette.length;
+                final int maxCells = maxPairs * 2;
+
+                if (totalCells > maxCells) {
+                  // Mostrar alerta si supera el máximo
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text("Error"),
+                      content: Text(
+                        "El tamaño máximo permitido es ${maxCells} celdas (${maxPairs} pares).",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text("Aceptar"),
+                        ),
+                      ],
+                    ),
+                  );
+                  return; // Salimos sin abrir el juego
+                }
+
+                // Si es válido, iniciamos el memorama
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -50,7 +76,7 @@ class _Seleccion_menuState extends State<Seleccion_menu> {
                   ),
                 );
               },
-              child: Text("Iniciar el juego"),
+              child: Text("Iniciar juego"),
             ),
           ],
         ),

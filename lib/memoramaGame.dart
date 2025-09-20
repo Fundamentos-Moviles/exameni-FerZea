@@ -38,6 +38,7 @@ class _MemoramaGameState extends State<MemoramaGame> {
 
     colors = List.generate(widget.gridWidth * widget.gridHeight, (index) => colorPairs[index]);
     visibility = List.generate(widget.gridWidth * widget.gridHeight, (index) => false);
+    selected.clear();
   }
 
   void restartGame() {
