@@ -44,6 +44,30 @@ class _MemoramaGameState extends State<MemoramaGame> {
     });
   }
 
+  bool checkWin() {
+    return visibility.every((v) => v == true);
+  }
+
+
+  void showWinDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Felicidades"),
+        content: Text("Has completado el memorama"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              restartGame();
+            },
+            child: Text("Reiniciar"),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   void handleSelection(int index) {
     if (selected.length == 2) return;
@@ -57,6 +81,11 @@ class _MemoramaGameState extends State<MemoramaGame> {
         int secondIndex = selected[1];
         if (colors[firstIndex] == colors[secondIndex]) {
           selected.clear();
+
+          if (checkWin()) {
+            showWinDialog();
+          }
+
         } else {
           Future.delayed(Duration(seconds: 1), () {
             setState(() {
@@ -89,7 +118,10 @@ class _MemoramaGameState extends State<MemoramaGame> {
                 return GestureDetector(
                   onTap: () => handleSelection(index),
                   child: Container(
+                    decoration: BoxDecoration( //para suavizar los cuadrados
                     color: visibility[index] ? colors[index] : Colors.grey,
+                        borderRadius: BorderRadius.circular(12),
+                    ),
                     margin: EdgeInsets.all(4),
                     child: Center(child: Text("")),
                   ),
