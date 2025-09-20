@@ -9,6 +9,7 @@ class MemoramaGame extends StatefulWidget {
 class _MemoramaGameState extends State<MemoramaGame> {
   List<Color> colors = [];
   List<bool> visibility = [];
+  List<int> selected = [];
 
   int gridWidth = 4;
   int gridHeight = 5;
@@ -19,6 +20,8 @@ class _MemoramaGameState extends State<MemoramaGame> {
     generateInitialGrid();
 
   }
+
+
 
   void generateInitialGrid() {
     Set<Color> uniqueColors = Set();  // usamos un Set para evitar dobles
@@ -41,6 +44,32 @@ class _MemoramaGameState extends State<MemoramaGame> {
     });
   }
 
+
+  void handleSelection(int index) {
+    if (selected.length == 2) return;
+
+    setState(() {
+      visibility[index] = true;
+      selected.add(index);
+
+      if (selected.length == 2) {
+        int firstIndex = selected[0];
+        int secondIndex = selected[1];
+        if (colors[firstIndex] == colors[secondIndex]) {
+          selected.clear();
+        } else {
+          Future.delayed(Duration(seconds: 1), () {
+            setState(() {
+              visibility[firstIndex] = false;
+              visibility[secondIndex] = false;
+              selected.clear();
+            });
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,11 +87,7 @@ class _MemoramaGameState extends State<MemoramaGame> {
               itemCount: colors.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      visibility[index] = true;  // Al hacer hara que se vean lso diferentes colores
-                    });
-                  },
+                  onTap: () => handleSelection(index),
                   child: Container(
                     color: visibility[index] ? colors[index] : Colors.grey,
                     margin: EdgeInsets.all(4),
