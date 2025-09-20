@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'random_colors.dart';
 
 class MemoramaGame extends StatefulWidget {
   @override
@@ -20,15 +21,18 @@ class _MemoramaGameState extends State<MemoramaGame> {
   }
 
   void generateInitialGrid() {
-    colors = List.generate(gridWidth * gridHeight, (index)
-        {
-          return Colors.blue;
-        });
+    Set<Color> uniqueColors = Set();  // usamos un Set para evitar dobles
 
-    visibility = List.generate(gridWidth * gridHeight, (index)
-        {
-          return false; //Mando un false para que que ponga inicialmente las cuadriculas en gris
-        });
+    while (uniqueColors.length < (gridWidth * gridHeight) ~/ 2) {
+      uniqueColors.add(randomColor());
+    }
+
+    List<Color> colorPairs = uniqueColors.toList(); //trasforma el set a lista
+    colorPairs.addAll(uniqueColors);
+    colorPairs.shuffle();
+
+    colors = List.generate(gridWidth * gridHeight, (index) => colorPairs[index]);
+    visibility = List.generate(gridWidth * gridHeight, (index) => false);
   }
 
   void restartGame() {
@@ -56,7 +60,7 @@ class _MemoramaGameState extends State<MemoramaGame> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      visibility[index] = true;  // Al hacer tap, cambiamos la visibilidad a `true`, lo que hará que se vea el color azul
+                      visibility[index] = true;  // Al hacer hara que se vean lso diferentes colores
                     });
                   },
                   child: Container(
