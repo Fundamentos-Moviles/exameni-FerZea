@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'random_colors.dart';
 
 class MemoramaGame extends StatefulWidget {
+  final int gridWidth;
+  final int gridHeight;
+
+  MemoramaGame({this.gridWidth = 4, this.gridHeight = 5}); // valores por defecto
+
   @override
   _MemoramaGameState createState() => _MemoramaGameState();
 }
@@ -10,9 +15,6 @@ class _MemoramaGameState extends State<MemoramaGame> {
   List<Color> colors = [];
   List<bool> visibility = [];
   List<int> selected = [];
-
-  int gridWidth = 4;
-  int gridHeight = 5;
 
   @override
   void initState() {
@@ -26,7 +28,7 @@ class _MemoramaGameState extends State<MemoramaGame> {
   void generateInitialGrid() {
     Set<Color> uniqueColors = Set();  // usamos un Set para evitar dobles
 
-    while (uniqueColors.length < (gridWidth * gridHeight) ~/ 2) {
+    while (uniqueColors.length < (widget.gridWidth * widget.gridHeight) ~/ 2) {
       uniqueColors.add(randomColor());
     }
 
@@ -34,8 +36,8 @@ class _MemoramaGameState extends State<MemoramaGame> {
     colorPairs.addAll(uniqueColors);
     colorPairs.shuffle();
 
-    colors = List.generate(gridWidth * gridHeight, (index) => colorPairs[index]);
-    visibility = List.generate(gridWidth * gridHeight, (index) => false);
+    colors = List.generate(widget.gridWidth * widget.gridHeight, (index) => colorPairs[index]);
+    visibility = List.generate(widget.gridWidth * widget.gridHeight, (index) => false);
   }
 
   void restartGame() {
@@ -109,7 +111,7 @@ class _MemoramaGameState extends State<MemoramaGame> {
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: gridWidth,  // Número de columnas
+                crossAxisCount: widget.gridWidth,  // Número de columnas
                 childAspectRatio: 1.0,  // Aspecto de cada celda (1:1)
               ),
               shrinkWrap: true,
