@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MemoramaGame extends StatefulWidget {
@@ -9,7 +8,6 @@ class MemoramaGame extends StatefulWidget {
 class _MemoramaGameState extends State<MemoramaGame> {
   List<Color> colors = [];
   List<bool> visibility = [];
-  List<int> selectedIndexes = [];
 
   int gridWidth = 4;
   int gridHeight = 5;
@@ -33,6 +31,11 @@ class _MemoramaGameState extends State<MemoramaGame> {
         });
   }
 
+  void restartGame() {
+    setState(() {
+      generateInitialGrid();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,11 @@ class _MemoramaGameState extends State<MemoramaGame> {
               itemCount: colors.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      visibility[index] = true;  // Al hacer tap, cambiamos la visibilidad a `true`, lo que hará que se vea el color azul
+                    });
+                  },
                   child: Container(
                     color: visibility[index] ? colors[index] : Colors.grey,
                     margin: EdgeInsets.all(4),
@@ -59,6 +67,10 @@ class _MemoramaGameState extends State<MemoramaGame> {
                 );
               },
             ),
+          ),
+          ElevatedButton(
+            onPressed: restartGame,
+            child: Text("Reiniciar Juego"),
           ),
         ],
       ),
