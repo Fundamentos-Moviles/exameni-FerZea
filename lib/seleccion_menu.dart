@@ -65,7 +65,27 @@ class _Seleccion_menuState extends State<Seleccion_menu> {
                       ],
                     ),
                   );
-                  return; // Salimos sin abrir el juego
+                  return;
+                }
+
+                //implementacion para controlar impares
+                if (totalCells % 2 != 0) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text("Error"),
+                      content: Text(
+                        "El total de celdas debe ser par para formar pares de colores.",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text("Aceptar"),
+                        ),
+                      ],
+                    ),
+                  );
+                  return;
                 }
 
                 // Si es válido, iniciamos el memorama
